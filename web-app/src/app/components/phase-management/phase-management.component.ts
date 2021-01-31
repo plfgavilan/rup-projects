@@ -26,7 +26,7 @@ export class PhaseManagementComponent implements OnInit {
   }
 
   openIteration(iteration: Iteration): void {
-    this.router.navigateByUrl(`/iteration-management`, {queryParams: {id: iteration.id}}).then();
+    this.router.navigate([`/iteration-management`], {queryParams: {id: iteration.id}}).then();
   }
 
   openPhases(): void {
