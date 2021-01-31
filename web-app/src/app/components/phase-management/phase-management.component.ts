@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Iteration} from '../../models/iteration';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PhaseService} from '../../services/phase.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Iteration } from '../../models/iteration';
+import { PhaseService } from '../../services/phase.service';
 
 @Component({
   selector: 'app-phase-management',
@@ -26,7 +26,7 @@ export class PhaseManagementComponent implements OnInit {
   }
 
   openIteration(iteration: Iteration): void {
-    this.router.navigateByUrl(`/iteration-management/${iteration.id}`).then();
+    this.router.navigateByUrl(`/iteration-management`, {queryParams: {id: iteration.id}}).then();
   }
 
   openPhases(): void {

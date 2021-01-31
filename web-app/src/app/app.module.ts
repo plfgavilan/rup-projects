@@ -34,6 +34,7 @@ import { PhaseManagementComponent } from './components/phase-management/phase-ma
 import { IterationService } from './services/iteration.service';
 import { InitProjectComponent } from './components/init-project/init-project.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { IterationManagementComponent } from './components/iteration-management/iteration-management.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     IterationSizeComponent,
     ProjectManagementComponent,
     PhaseManagementComponent,
-    InitProjectComponent
+    InitProjectComponent,
+    IterationManagementComponent
   ],
   imports: [
     AppRoutingModule,
