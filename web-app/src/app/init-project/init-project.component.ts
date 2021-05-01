@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Project} from '../shared/models/project';
-import {ProjectProxyService} from '../shared/services/project-proxy.service';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
+import {ProjectFacadeController} from '../../logic';
 
 @Component({
   selector: 'app-init-project',
@@ -14,18 +14,20 @@ export class InitProjectComponent implements OnInit {
   project$: Observable<Project>;
   panelOpenState = false;
 
-  constructor(private projectService: ProjectProxyService, private router: Router) {
+  constructor(@Inject('ProjectFacadeController') private projectService: ProjectFacadeController, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.project$ = this.projectService.startSystem();
+    this.project$ = from(this.projectService.startSystem());
   }
 
-  planProject(): void {
+  // @ts-ignore
+  async planProject(): Observable<void> {
     if (this.project$ != null) {
-      this.projectService.deleteProject().subscribe(() => this.router.navigateByUrl('/project/new'));
+      await this.projectService.deleteProject();
+      this.router.navigateByUrl('init-project/new');
     } else {
-      this.router.navigateByUrl('/project/new').then();
+      this.router.navigateByUrl('init-project/new').then();
     }
   }
 

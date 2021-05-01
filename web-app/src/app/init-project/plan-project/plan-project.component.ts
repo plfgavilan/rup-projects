@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Project} from '../../shared/models/project';
-import {ProjectProxyService} from '../../shared/services/project-proxy.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {from, Observable} from 'rxjs';
 import {Phase} from '../../shared/models/phase';
 import {MatStepper} from '@angular/material/stepper';
 import {ProjectDateValidator} from '../../shared/validators/project-date.validator';
+import {ProjectFacadeController} from '../../../logic';
 
 @Component({
     selector: 'app-plan-project',
@@ -24,7 +24,9 @@ export class PlanProjectComponent implements OnInit {
     columnsToDisplay: string[] = this.displayedColumns.slice();
 
 
-    constructor(private projectService: ProjectProxyService, private router: Router, private formBuilder: FormBuilder) {
+    constructor(
+      @Inject('ProjectFacadeController') private projectService: ProjectFacadeController,
+      private router: Router, private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {
@@ -49,24 +51,25 @@ export class PlanProjectComponent implements OnInit {
     }
 
     toIterationsSizeStep(stepper: MatStepper): void {
+        const CONTROL_NAME = 'numberOfIterations';
         this.planProject().subscribe(project => {
             this.project = project;
-            this.iterationSizeFormGroup.controls['numberOfIterations'].setValue(project.numberOfIterations);
+            this.iterationSizeFormGroup.controls[CONTROL_NAME].setValue(project.numberOfIterations);
             stepper.next();
         });
     }
 
     backToBasicInfoStep(stepper: MatStepper): void {
-        this.projectService.deleteProject().subscribe(() => stepper.previous());
+        from(this.projectService.deleteProject()).subscribe(() => stepper.previous());
     }
 
 
     planProject(): Observable<Project> {
-        return this.projectService.planProject(this.basicInfoFormGroup.getRawValue());
+        return from(this.projectService.planProject(this.basicInfoFormGroup.getRawValue()));
     }
 
     cancel(): void {
-        this.projectService.deleteProject().subscribe(() => this.router.navigateByUrl('/').then());
+      from(this.projectService.deleteProject()).subscribe(() => this.router.navigateByUrl('/').then());
     }
 
     save(): void {
