@@ -8,6 +8,11 @@ import {ProjectProxyService} from '../shared/services/project-proxy.service';
 import {ProjectDaoImpl} from '../infrastructure/project-dao-impl';
 import {ProjectFacadeController} from '../../logic/';
 
+
+const projectFacadeFactory = (dao: ProjectDaoImpl): ProjectFacadeController => {
+  return new ProjectProxyService(dao);
+};
+
 @NgModule({
   declarations: [InitProjectComponent, PlanProjectComponent],
   imports: [
@@ -18,7 +23,7 @@ import {ProjectFacadeController} from '../../logic/';
   providers: [
     {
       provide: 'ProjectFacadeController',
-      useClass: ProjectProxyService,
+      useFactory: projectFacadeFactory,
       deps: [ProjectDaoImpl]
     }
   ]
