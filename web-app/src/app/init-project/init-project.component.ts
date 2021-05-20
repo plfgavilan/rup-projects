@@ -23,9 +23,9 @@ export class InitProjectComponent implements OnInit {
 
   planProject(): void {
     if (this.project$ != null) {
-      this.projectService.deleteProject().subscribe(() => this.router.navigateByUrl('/init-project/new'));
+      this.projectService.deleteProject().subscribe(() => this.router.navigateByUrl('/project/new'));
     } else {
-      this.router.navigateByUrl('/init-project/new').then();
+      this.router.navigateByUrl('/project/new').then();
     }
   }
 

@@ -1,30 +1,32 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {resourceServer} from '../../../environments/environment';
+import {Inject, Injectable} from '@angular/core';
+import {ControllerProjectFacade} from '../../../logic/index';
+import {ProjectDao} from '../../../logic/daos/project.dao';
+import {from, Observable} from 'rxjs';
 import {Project} from '../models/project';
 import {PlanProjectDto} from '../models/planProjectDto';
-import {HttpService} from '../../core/http.service';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
+import {ProjectDaoImpl} from '../../infrastructure/project-dao-impl';
 
-@Injectable()
-export class ProjectProxyService {
+@Injectable({
+  providedIn: 'root',
+  deps: [ProjectDaoImpl]
+})
+export class ProjectProxyService extends ControllerProjectFacade {
 
-  private RESOURCE = 'projects';
-
-  constructor(private httpService: HttpService) {
+  constructor(@Inject('ProjectDao') dao: ProjectDao) {
+    super(dao);
   }
 
   startSystem(): Observable<Project> {
-    return this.httpService.get(`${resourceServer}/${this.RESOURCE}/opened`);
+    return from(this.startSystemAbst());
   }
 
   planProject(project: PlanProjectDto): Observable<Project> {
-    return this.httpService.post(`${resourceServer}/${this.RESOURCE}`, project);
+    return from(this.planProjectAbst(project));
   }
 
   deleteProject(): Observable<void> {
-    return this.httpService.delete(`${resourceServer}/${this.RESOURCE}`);
+    const projectId = '1';
+    return from(this.deleteProjectAbst(projectId));
   }
-
 }
-
-

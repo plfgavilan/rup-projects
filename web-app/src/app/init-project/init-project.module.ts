@@ -4,6 +4,8 @@ import {InitProjectRoutingModule} from './init-project-routing.module';
 import {InitProjectComponent} from './init-project.component';
 import {SharedModule} from '../shared/shared.module';
 import {PlanProjectComponent} from './plan-project/plan-project.component';
+import {ProjectProxyService} from '../shared/services/project-proxy.service';
+import {ProjectDaoImpl} from '../infrastructure/project-dao-impl';
 
 
 @NgModule({
@@ -12,6 +14,10 @@ import {PlanProjectComponent} from './plan-project/plan-project.component';
     CommonModule,
     InitProjectRoutingModule,
     SharedModule
+  ],
+  providers: [
+    ProjectProxyService,
+    { provide: 'ProjectDao', useClass: ProjectDaoImpl},
   ]
 })
 export class InitProjectModule {
